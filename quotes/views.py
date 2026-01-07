@@ -1,9 +1,14 @@
+import logging
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
 from inspiring_quotes import get_random_quote
 
 
 # Create your views here.
+
+logger = logging.getLogger(__name__)
+# logger = logging.getLogger("playground")
+
 
 DAYS = [
     "monday",
@@ -67,5 +72,5 @@ def days_week_with_number(request, day):
         quote_text = get_quote(day)    
         return HttpResponse(f"Hello, today is {DAYS_WEEK_WITH_NUMBER.get(day).capitalize()}.\n {quote_text}")
     except KeyError:
-        print
+        logger.info(f"Error en days_week_with_number {KeyError}")
         return HttpResponseNotFound("Not a valid number for a day of the week.")
