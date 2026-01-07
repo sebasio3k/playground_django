@@ -15,6 +15,16 @@ DAYS = [
     "sunday",
 ]
 
+DAYS_WEEK_WITH_NUMBER = {
+    1: "monday",
+    2: "tuesday",
+    3: "wednesday",
+    4: "thursday",
+    5: "friday",
+    6: "saturday",
+    7: "sunday",
+}
+
 def index(request):
     return HttpResponse("Hello, world. You're at the quotes index.")
 
@@ -27,8 +37,12 @@ def index(request):
 def get_quote(day):
     quote = get_random_quote()
     text = ''
+    if type(day) == int:
+        day = DAYS_WEEK_WITH_NUMBER[day]
+    else:
+        day = day.lower()
     
-    if day.lower() == "tuesday":
+    if day == "tuesday":
         text = "No quotes available today."
         print(text)
     elif quote:
@@ -47,3 +61,11 @@ def days_week(request, day):
     quote_text = get_quote(day)    
     return HttpResponse(f"Hello, today is {day.capitalize()}.\n {quote_text}")
 
+def days_week_with_number(request, day):
+    
+    try:
+        quote_text = get_quote(day)    
+        return HttpResponse(f"Hello, today is {DAYS_WEEK_WITH_NUMBER.get(day).capitalize()}.\n {quote_text}")
+    except KeyError:
+        print
+        return HttpResponseNotFound("Not a valid number for a day of the week.")
