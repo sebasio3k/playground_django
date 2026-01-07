@@ -5,8 +5,9 @@ from . import views
 
 urlpatterns = [
     path("index", views.index),
-    path("monday", views.monday),
-    path("tuesday", views.tuesday),
+    # path("monday", views.monday),
+    # path("tuesday", views.tuesday),
+    path("<day>", views.days_week),
 
 
 ]
