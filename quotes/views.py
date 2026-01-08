@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from inspiring_quotes import get_random_quote
 
 
@@ -71,6 +71,7 @@ def days_week_with_number(request, day):
     try:
         quote_text = get_quote(day)    
         return HttpResponse(f"Hello, today is {DAYS_WEEK_WITH_NUMBER.get(day).capitalize()}.\n {quote_text}")
+        # return HttpResponseRedirect("/quotes/index")
     except KeyError:
         logger.info(f"Error en days_week_with_number {KeyError}")
         return HttpResponseNotFound("Not a valid number for a day of the week.")
