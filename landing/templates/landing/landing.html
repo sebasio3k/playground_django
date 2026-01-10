@@ -7,8 +7,9 @@
 </head>
 <body>
     <h1>Hola mundo desde template</h1>
-    <h2>{{ name }}</h2
+    <h2>Nombre: {{ name | title }}</h2
     <p>Edad: {{ age }} </p>
+    <p>Fecha: {{ today | date:"d/m/Y" }} </p>
 </body>
 </html>
 
