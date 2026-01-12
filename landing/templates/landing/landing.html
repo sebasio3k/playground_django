@@ -5,11 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hola Mundo</title>
 </head>
-<body>
-    <h1>Hola mundo desde template</h1>
-    <h2>Nombre: {{ name | title }}</h2
-    <p>Edad: {{ age }} </p>
+<body> 
+    
+    {% if name == "sebastian" %}
+        <h1>Hola Chato</h1>
+        <h2>Nombre: {{ name | title }}</h2>
+        <p>Edad: {{ age }}</p>
+    {% else %}
+        <h1>Hola Invitado</h1>
+    {% endif %}
+    
     <p>Fecha: {{ today | date:"d/m/Y" }} </p>
+
+    <p>{{stack}}</p>
+
+    <p>Stack de tecnologías:</p>
+    <ul>
+        {% for item in stack  %}
+            <li>{{item}}</li>
+            {% empty %}
+            <li>No hay tecnologías disponibles.</li>
+        {% endfor %}
+    </ul>
+        
 </body>
 </html>
 

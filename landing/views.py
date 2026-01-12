@@ -7,6 +7,8 @@ from datetime import date
 def home(request):
     nombre = "sebastian"
     today = date.today()
+    stack = ["HTML", "CSS", "JS", "Python", "React", "Django"]
+    # stack = []
     
     return render(
         request, 
@@ -14,6 +16,7 @@ def home(request):
         {
             "name": nombre,
             "age": 29,
-            "today": today
+            "today": today,
+            "stack": stack
         }
     )
