@@ -7,13 +7,17 @@
 
 
 {% block content %}
+
+    {% include './includes/partial.html' %}
+    {% include './includes/end_partial.html' with days=days name='Sebastian' %}
+    
     <h1>Phrases Index</h1>
     <ul>
         
-        {% for item in days  %}
-            <li><a href="{% url 'days_week' day=item %}">{{item | title}}</a></li>
-            {% empty %}
-            <li>No hay frase disponible</li>
+        {% for item in days %}
+        <li><a href="{% url 'days_week' day=item %}">{{item | title}}</a></li>
+        {% empty %}
+        <li>No hay frase disponible</li>
         {% endfor %}
     </ul>
 {% endblock content %}
