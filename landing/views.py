@@ -7,8 +7,10 @@ from datetime import date
 def home(request):
     nombre = "sebastian"
     today = date.today()
-    stack = ["HTML", "CSS", "JS", "Python", "React", "Django"]
+    # stack = ['HTML', 'CSS', 'JS', 'Python', 'React', 'Django']
     # stack = []
+    stack = [{'id': 'html', 'name': 'HTML'}, {'id': 'css', 'name': 'CSS'}, {'id': 'js', 'name': 'JS'}, {
+        'id': 'python', 'name': 'Python'}, {'id': 'react', 'name': 'React'}, {'id': 'django', 'name': 'Django'}]
     
     return render(
         request, 
@@ -20,3 +22,6 @@ def home(request):
             "stack": stack
         }
     )
+    
+def stack_datail(request, tool):
+    return HttpResponse(f"Tecnología: {tool}")
