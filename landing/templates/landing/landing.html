@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hola Mundo</title>
-</head>
-<body> 
+{% extends 'base.html' %}
     
+{% block title %}
+    Landing Page
+{% endblock title %}
+
+{% block content %}
     {% if name == "sebastian" %}
         <h1>Hola Chato</h1>
         <h2>Nombre: {{ name | title }}</h2>
@@ -27,9 +25,5 @@
             <li>No hay tecnologías disponibles.</li>
         {% endfor %}
     </ul>
-
-
-        
-</body>
-</html>
-
+{% endblock content %}
+    
