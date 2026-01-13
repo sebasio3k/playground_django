@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    QUOTES
+{% endblock title %}    
+
+
+{% block content %}
+    <h1>Phrases Index</h1>
+    <ul>
+        
+        {% for item in days  %}
+            <li><a href="{% url 'days_week' day=item %}">{{item | title}}</a></li>
+            {% empty %}
+            <li>No hay frase disponible</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
+    
