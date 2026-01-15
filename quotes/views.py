@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from inspiring_quotes import get_random_quote
 from django.urls import reverse
 
@@ -41,22 +41,36 @@ PHRASES_OF_THE_DAY = {
     "saturday": "Vive como si fuera le último dia",
     "sunday": "Da un poquito más todos los días"
 }
+PHRASES_OF_THE_WEEK = [
+    {'id': 'monday', 'phrase': 'Pienso, luego existo'},
+    {'id': 'tuesday', 'phrase': 'La vida es un sueño'},
+    {'id': 'wednesday', 'phrase': 'El conocimiento es poder'},
+    {'id': 'thursday', 'phrase': 'Sé el cambio que quieres ver'},
+    {'id': 'friday', 'phrase': 'Solo sé que no sé nada'},
+    {'id': 'saturday', 'phrase': 'Vive como si fuera le último dia'},
+    {'id': 'sunday', 'phrase': 'Da un poquito más todos los días'}
+]
+
+# def index(request):
+#     list_items = ""
+#     days = list(PHRASES_OF_THE_DAY.keys())
+    
+#     for day in days:
+#         day_path = reverse("days_week", args=[day])
+#         list_items += f"<li><a href=\"{day_path}\">{day.capitalize()}</a></li>"
+    
+#     template = f""" <h1> Hello, world. You're at the quotes index. </h1>
+#                 <ul>        
+#                     {list_items}
+#                 </ul>
+#                 """ 
+    
+#     return HttpResponse(template)
 
 def index(request):
-    list_items = ""
-    days = list(PHRASES_OF_THE_DAY.keys())
-    
-    for day in days:
-        day_path = reverse("days_week", args=[day])
-        list_items += f"<li><a href=\"{day_path}\">{day.capitalize()}</a></li>"
-    
-    template = f""" <h1> Hello, world. You're at the quotes index. </h1>
-                <ul>        
-                    {list_items}
-                </ul>
-                """ 
-    
-    return HttpResponse(template)
+    return render(request, "quotes/index.html", {
+        "days": PHRASES_OF_THE_DAY.keys()
+    })
 
 
 # def monday(request):
@@ -87,7 +101,9 @@ def get_quote(day):
 
 def days_week(request, day):
     if day.lower() not in DAYS:
-        return HttpResponseNotFound("<h1>Not a valid day of the week.</h1>")
+        # return HttpResponseNotFound("<h1>Not a valid day of the week.</h1>")
+        return render(request, "404.html", status=404)
+        # raise Http404() TODO: para cuando se pase a Produccion
     
     quote_text = get_quote(day)    
     return HttpResponse(f"Hello, today is {day.capitalize()}.\n {quote_text}")

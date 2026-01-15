@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    {% block css %}
+    <!-- CSS global -->
+    {% endblock css %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    {% include './includes/header.html' %}
+    {% comment %} <h1>Plantilla padre</h1> {% endcomment %}
+    
+    {% block content %}
+        
+    {% endblock content %}
+        
+</body>
+</html>
