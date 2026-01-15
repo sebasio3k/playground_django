@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block title %}
     QUOTES
-{% endblock title %}    
+{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'quotes/quotes_styles.css' %}">
+{% endblock css %}
 
 
 {% block content %}
