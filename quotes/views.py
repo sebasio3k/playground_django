@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from inspiring_quotes import get_random_quote
 from django.urls import reverse
 
@@ -102,7 +102,8 @@ def get_quote(day):
 def days_week(request, day):
     if day.lower() not in DAYS:
         # return HttpResponseNotFound("<h1>Not a valid day of the week.</h1>")
-        return render(request, "not_found.html", status=404)
+        return render(request, "404.html", status=404)
+        # raise Http404() TODO: para cuando se pase a Produccion
     
     quote_text = get_quote(day)    
     return HttpResponse(f"Hello, today is {day.capitalize()}.\n {quote_text}")
