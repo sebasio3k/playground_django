@@ -44,3 +44,13 @@ class Review(models.Model):
     
     def __str__(self):
         return f"{self.user} -> {self.book} - ({self.rating}⭐️/5⭐️) - {self.text}"
+    
+class Loan(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='loans')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='loans')
+    loan_date = models.DateTimeField(auto_now_add=True)
+    return_date = models.DateTimeField(null=True, blank=True)
+    is_returned = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.user} -> {self.book} - ({'Devuelto' if self.is_returned else 'Prestado'})"
