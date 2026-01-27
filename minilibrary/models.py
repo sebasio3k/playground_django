@@ -24,3 +24,12 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+    
+class BookDetail(models.Model):
+    summary = models.TextField()
+    cover_url = models.CharField()
+    language = models.CharField()
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, related_name='detail')
+    
+    def __str__(self):
+        return self.summary
