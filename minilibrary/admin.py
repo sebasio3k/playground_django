@@ -41,6 +41,7 @@ class BookAdmin(admin.ModelAdmin):
     ordering = ['-publication_date']
     date_hierarchy = 'publication_date'
     readonly_fields = ('pages',)
+    autocomplete_fields = ('author', 'genres',)
     
     fieldsets = (
         ("Información General", {
@@ -56,16 +57,26 @@ class BookAdmin(admin.ModelAdmin):
         }),
     )
     
-    
 @admin.register(Loan)
 class LoanAdmin(admin.ModelAdmin):
     readonly_fields = ('loan_date',)
     list_display = ('user', 'book', 'loan_date', 'return_date', 'is_returned')
     actions = [mark_as_returned]
+    raw_id_fields = ('user', 'book')
+    
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('name', 'birth_date',)
+    search_fields = ('name',)
+    
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
 
-admin.site.register(Author)
-admin.site.register(Genre)
+# admin.site.register(Author)
+# admin.site.register(Genre)
 # admin.site.register(Book, BookAdmin)
 admin.site.register(BookDetail)
 admin.site.register(Review)
