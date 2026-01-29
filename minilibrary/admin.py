@@ -31,6 +31,27 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ('author', 'genres')
     ordering = ['-publication_date']
     date_hierarchy = 'publication_date'
+    readonly_fields = ('pages',)
+    
+    fieldsets = (
+        ("Información General", {
+            "fields": (
+                "title", "author", "genres", "publication_date",
+            ),
+        }),
+        ("Detalles", {
+            "fields": (
+                "isbn", "pages",
+            ),
+            "classes": ("collapse",),
+        }),
+    )
+    
+    
+@admin.register(Loan)
+class LoanAdmin(admin.ModelAdmin):
+    readonly_fields = ('loan_date',)
+    list_display = ('user', 'book', 'loan_date', 'return_date', 'is_returned')
 
 
 admin.site.register(Author)
@@ -38,7 +59,7 @@ admin.site.register(Genre)
 # admin.site.register(Book, BookAdmin)
 admin.site.register(BookDetail)
 admin.site.register(Review)
-admin.site.register(Loan)
+# admin.site.register(Loan, LoanAdmin)
 admin.site.register(Recommendation)
 
 try:
