@@ -26,10 +26,12 @@ class BookDetailInline(admin.TabularInline):
     model = BookDetail
     can_delete = False
     verbose_name_plural = 'Detalles del libro'
-    
+
+
 class CustomUserAdmin(BaseUserAdmin):
     inlines = [LoanInline]
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+    list_display = ('username', 'email', 'first_name',
+                    'last_name', 'is_staff', 'is_superuser', 'is_active',)
 
 # MODELS REGISTERS
 @admin.register(Book)
@@ -56,6 +58,14 @@ class BookAdmin(admin.ModelAdmin):
             "classes": ("collapse",),
         }),
     )
+    
+    # PERMISSIONS BY CODING
+    def has_add_permission(self, request):
+        return request.user.is_superuser
+    
+    def has_change_permission(self, request, obj = None):
+        return request.user.is_staff
+    
     
 @admin.register(Loan)
 class LoanAdmin(admin.ModelAdmin):
