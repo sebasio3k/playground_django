@@ -1,10 +1,13 @@
-from datetime import datetime
 from django.contrib import admin
 from .models import Author, Genre, Book, BookDetail, Review, Loan, Recommendation
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from datetime import datetime
 
 User = get_user_model()
+admin.site.site_header = 'Administrador Minilibrary'
+admin.site.site_title = 'Minilibrary Panel'
+admin.site.index_title = 'Bienvenidos al Panel de Administración Minilibrary'
 
 # Register your models here.
 
