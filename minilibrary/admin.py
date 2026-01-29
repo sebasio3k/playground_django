@@ -3,9 +3,18 @@ from .models import Author, Genre, Book, BookDetail, Review, Loan, Recommendatio
 
 # Register your models here.
 
-
+class ReviewInline(admin.TabularInline):
+    model = Review
+    extra = 1
+    
+class BookDetailInline(admin.TabularInline):
+    model = BookDetail
+    can_delete = False
+    verbose_name_plural = 'Detalles del libro'
+    
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
+    inlines = [ReviewInline, BookDetailInline]
     list_display = ('title', 'author', 'pages', 'publication_date' )
     search_fields = ('title', 'author__name')
     list_filter = ('author', 'genres')
