@@ -81,7 +81,17 @@ ul {
 }
 
 li {
+    position: relative;
+    padding-left: 16px;
+    /* espacio para el puntito */
     margin-bottom: 12px;
+}
+
+li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--blue);
 }
 
 li a {

@@ -12,7 +12,19 @@
 
 {% block content %}
     <h1>{{text}}</h1>
-
+    <hr>
+    <h2>Author id: {{author_id}}</h2>
+    <h2>Libros de autor: {{author.name}}</h2>
+    <br>
+    <p>Genero id: {{genre_id}}</p>
     
+    <ul>
+        {% for book in books %}
+            <li>Book: {{book.title}}</li>
+            {% empty %}
+                <li>No se encontraron libros...</li>
+        {% endfor %}
+    </ul>
+
 {% endblock content %}
     
