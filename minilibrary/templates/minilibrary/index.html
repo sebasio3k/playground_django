@@ -11,16 +11,36 @@
 
 
 {% block content %}
-    <h1>{{text}}</h1>
+    <div>
+        <h1>{{text}}</h1>
+    </div>
     <hr>
-    <h2>Author id: {{author_id}}</h2>
-    <h2>Libros de autor: {{author.name}}</h2>
     <br>
-    <p>Genero id: {{genre_id}}</p>
+    <div>
+        <form method="get">
+            <input 
+            type="text" 
+            name="query_search" 
+            placeholder="Buscar por Título o Autor"
+            value="{{query}}">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+
+    {% comment %} <h2>Author id: {{author_id}}</h2> {% endcomment %}
+    {% comment %} <h2>Libros de autor: {{author.name}}</h2> {% endcomment %}
+    <br>
+    {% comment %} <p>Genero id: {{ genre_id|default:"" }}</p> {% endcomment %}
     
+    <hr>
+    <h2>Resultados de Busqueda</h2>
+    {% comment %} <p>{{books}}</p> {% endcomment %}
+
     <ul>
         {% for book in books %}
-            <li>Book: {{book.title}}</li>
+            <li>Book: {{book.title}} - {{book.author}}
+            </li>
             {% empty %}
                 <li>No se encontraron libros...</li>
         {% endfor %}

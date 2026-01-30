@@ -183,5 +183,10 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
+        "minilibrary": {
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
     },
 }
