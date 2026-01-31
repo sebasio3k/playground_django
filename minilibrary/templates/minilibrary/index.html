@@ -1,0 +1,100 @@
+{% extends 'base_blank.html' %}
+{% load static %}
+
+{% block title %}
+    Minilibrary
+{% endblock title %}
+    
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock css %}
+
+
+{% block content %}
+    <div>
+        <h1>{{text}}</h1>
+    </div>
+    <hr>
+    <br>
+    <div>
+        <form method="get">
+            <input type="text" name="query_search" placeholder="Buscar por Título o Autor" value="{% if query %}{{query}}{% endif %}">
+            <input type="date" name="start" value={{request.GET.start}}>
+            <input type="date" name="end" value={{request.GET.end}}>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <br>
+
+    <hr>
+    <h2>Resultados de Busqueda</h2>
+    {% comment %} <p>{{books}}</p> {% endcomment %}
+
+    <ul>
+        {% for book in page_obj %}
+            <li> <q>{{book.title}}</q> - <strong> <em> {{book.author}} </em> </strong> -> {{book.publication_date}}
+            </li>
+        {% empty %}
+            <li> <strong>No se encontraron libros...</strong> </li>
+        {% endfor %}
+    </ul>
+
+    {% comment %} <div>
+        {% if page_obj.has_previous %}
+            <a class="pager-btn" href="?query_search={{query}}&page=1"><<</a>
+            <a class="pager-btn" href="?query_search={{query}}&page={{page_obj.previous_page_number}}"><</a>
+        {% endif %}
+
+        <span>Página {{page_obj.number}} de {{page_obj.paginator.num_pages}}</span>
+
+        {% if page_obj.has_next %}
+            <a class="pager-btn" href="?query_search={{query}}&page={{page_obj.next_page_number}}">></a>
+            <a class="pager-btn" href="?query_search={{query}}&page={{page_obj.paginator.num_pages}}">>></a>
+        {% endif %}
+    </div> {% endcomment %}
+
+
+    {% comment %} PAGINATOR {% endcomment %}
+    <div class="pager">
+        {# Primera / Anterior #}
+        {% if page_obj.has_previous %}
+            <a class="pager-btn" href="?page=1&{{query_string}}" aria-label="Primera página">
+                &laquo;
+            </a>
+            <a class="pager-btn" href="?page={{page_obj.previous_page_number}}&{{query_string}}" aria-label="Página anterior">
+                &lsaquo;
+            </a>
+        {% else %}
+            <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la primera página">
+                &laquo;
+            </span>
+            <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la primera página">
+                &lsaquo;
+            </span>
+        {% endif %}
+
+        <span class="pager-info">
+            Página <strong>{{ page_obj.number }}</strong> de <strong>{{ page_obj.paginator.num_pages }}</strong>
+        </span>
+
+        {# Siguiente / Última #}
+        {% if page_obj.has_next %}
+            <a class="pager-btn" href="?page={{page_obj.next_page_number}}&{{query_string}}" aria-label="Página siguiente">
+                &rsaquo;
+            </a>
+            <a class="pager-btn" href="?page={{page_obj.paginator.num_pages}}&{{query_string}}" aria-label="Última página">
+                &raquo;
+            </a>
+        {% else %}
+            <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la última página">
+                &rsaquo;
+            </span>
+            <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la última página">
+                &raquo;
+            </span>
+        {% endif %}
+    </div>
+
+
+{% endblock content %}
+    
