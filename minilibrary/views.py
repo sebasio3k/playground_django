@@ -2,6 +2,7 @@ import logging
 from django.shortcuts import render
 from minilibrary.models import Author, Book
 from django.db.models import Q, F
+from django.core.paginator import Paginator
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,7 @@ def index(request):
         books = Book.objects.all()
         query = request.GET.get('query_search')
 
+        # filters
         if query:
             books = books.filter(
                 Q(title__icontains=query) | 
@@ -45,9 +47,16 @@ def index(request):
             ).distinct()
             logger.info(f'Query: {query}, Results: {books.count()}')
         
+        # pagination
+        paginator = Paginator(books, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        
         return render(request, "minilibrary/index.html", {
             'text': "Minilibrary Page",
-            'books': books,
+            # 'books': books,
+            'page_obj': page_obj,
             'query': query,
         })
     except Exception as e:

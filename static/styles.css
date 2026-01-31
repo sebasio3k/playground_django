@@ -153,3 +153,60 @@ a:hover {
 .center {
     text-align: center;
 }
+
+.pager {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    /* no se baja */
+    margin-top: 16px;
+}
+
+.pager-info {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 6px;
+    white-space: nowrap;
+    /* “Página 4 de 5” no se parte */
+}
+
+.pager-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, .6);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+    user-select: none;
+}
+
+.pager-icon {
+    width: 18px;
+    height: 18px;
+    color: rgba(29, 29, 31, .65);
+}
+
+.pager-btn:hover {
+    background: white;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+}
+
+.pager-btn:hover .pager-icon {
+    color: rgba(29, 29, 31, .9);
+}
+
+.pager-btn.is-disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    pointer-events: none;
+    /* no click */
+    box-shadow: none;
+    transform: none;
+}
+
+
