@@ -37,6 +37,8 @@ def index(request):
     try:
         books = Book.objects.all()
         query = request.GET.get('query_search')
+        date_start = request.GET.get('start')
+        date_end = request.GET.get('end')
 
         # filters
         if query:
@@ -46,11 +48,21 @@ def index(request):
                 Q(genres__name__icontains=query)
             ).distinct()
             logger.info(f'Query: {query}, Results: {books.count()}')
+            
+        if date_start and date_end:
+            books = books.filter(publication_date__range=[date_start, date_end])
         
         # pagination
         paginator = Paginator(books, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        
+        query_params = request.GET.copy()
+        
+        if "page" in query_params:
+            del query_params["page"]
+            
+        query_string = query_params.urlencode()
         
         
         return render(request, "minilibrary/index.html", {
@@ -58,6 +70,7 @@ def index(request):
             # 'books': books,
             'page_obj': page_obj,
             'query': query,
+            "query_string": query_string
         })
     except Exception as e:
         logger.error(f'Error: {e}')
