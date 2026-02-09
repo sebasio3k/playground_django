@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from minilibrary.models import Author, Book
 from django.db.models import Q, F
 from django.core.paginator import Paginator
-from .forms import ReviewSimpleForm
+from .forms import ReviewSimpleForm, ReviewForm
 from .models import Review
 from django.contrib.auth import get_user_model
 from django.contrib import  messages
@@ -106,6 +106,32 @@ def add_review(request, book_id):
             messages.error(request, "Corrija los errores de la reseña")
         
     return render(request, "minilibrary/add_review.html", {
+        'book': book,
+        'form': form,
+        'book_reviews': book_reviews
+    })
+    
+
+# Con ModelForm
+def add_review_form(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    form = ReviewForm(request.POST or None)
+    book_reviews = Review.objects.filter(book=book)
+    
+    if request.method == "POST":
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.book = book
+            review.user = request.user
+            # review.user = request.user if request.user.is_authenticated else User.objects.first()
+            review.save()
+            
+            messages.success(request, "Gracias por la reseña")
+            return redirect('recommend_book_form', book_id=book.id)
+        else:
+            messages.error(request, "Corrija los errores de la reseña", extra_tags='danger')
+        
+    return render(request, "minilibrary/add_review_form.html", {
         'book': book,
         'form': form,
         'book_reviews': book_reviews

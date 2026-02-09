@@ -32,7 +32,7 @@
 
     <ul>
         {% for book in page_obj %}
-            <li> <a href="{% url 'recommend_book' book_id=book.id %}"><q>{{book.title}}</q></a> - <strong> <em> {{book.author}} </em> </strong> -> {{book.publication_date}}
+            <li> <a href="{% url 'recommend_book_form' book_id=book.id %}"><q>{{book.title}}</q></a> - <strong> <em> {{book.author}} </em> </strong> -> {{book.publication_date}}
             </li>
         {% empty %}
             <li> <strong>No se encontraron libros...</strong> </li>
