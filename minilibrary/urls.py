@@ -8,4 +8,5 @@ urlpatterns = [
     path('recomendarForm/<int:book_id>', views.add_review_form, name='recommend_book_form'),
     path('hello-fbv', views.hello, name='hello-fbv'),
     path('hello-cbv', views.Hello.as_view(), name='hello-cbv'),
+    path('welcome', views.WelcomeView.as_view(), name='welcome'),
 ]

@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import  messages
 from django.http import HttpResponse
 from django.views import View
+from django.views.generic import TemplateView
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -23,6 +24,10 @@ def hello(request):
 class Hello(View):
     def get(self, request):
         return HttpResponse("Hello World from CBV")
+    
+
+class WelcomeView(TemplateView):
+    template_name = "minilibrary/welcome.html"
     
 
 def index_1(request):
