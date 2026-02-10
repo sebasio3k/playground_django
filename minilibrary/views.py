@@ -29,6 +29,12 @@ class Hello(View):
 class WelcomeView(TemplateView):
     template_name = "minilibrary/welcome.html"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Minilibrary"
+        context['total_books'] = Book.objects.count()
+        return context
+    
 
 def index_1(request):
     try:
