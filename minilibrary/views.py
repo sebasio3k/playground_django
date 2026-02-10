@@ -7,11 +7,23 @@ from .forms import ReviewSimpleForm, ReviewForm
 from .models import Review
 from django.contrib.auth import get_user_model
 from django.contrib import  messages
+from django.http import HttpResponse
+from django.views import View
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
 # Create your views here.
+
+# FBV
+def hello(request):
+    return HttpResponse("Hello World from FBV")
+
+# CBV
+class Hello(View):
+    def get(self, request):
+        return HttpResponse("Hello World from CBV")
+    
 
 def index_1(request):
     try:
