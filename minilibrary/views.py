@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import  messages
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -35,6 +35,14 @@ class WelcomeView(TemplateView):
         context['total_books'] = Book.objects.count()
         return context
     
+
+class BookListView(ListView):
+    model = Book
+    template_name = "minilibrary/book_list.html"
+    context_object_name = "books"
+    paginate_by = 5
+
+
 
 def index_1(request):
     try:

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Book List
+{% endblock title %}
+    
+
+
+{% block content %}
+    <h1>Book List</h1>
+    <h2>Libros disponibles</h2>
+
+    <ul>
+        {% for book in books %}
+            <li><strong>{{book.title}}</strong> - {{book.author.name}}</li>
+        {% empty%}
+            <li>No hay libros disponibles</li>
+        {% endfor %}
+    </ul>
+
+    {% comment %} PAGINATOR {% endcomment %}
+    {% if is_paginated %}
+        <div class="pager">
+            {# Primera / Anterior #}
+            {% if page_obj.has_previous %}
+                <a class="pager-btn" href="?page=1&{{query_string}}" aria-label="Primera página">
+                    &laquo;
+                </a>
+                <a class="pager-btn" href="?page={{page_obj.previous_page_number}}&{{query_string}}" aria-label="Página anterior">
+                    &lsaquo;
+                </a>
+            {% else %}
+                <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la primera página">
+                    &laquo;
+                </span>
+                <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la primera página">
+                    &lsaquo;
+                </span>
+            {% endif %}
+
+            <span class="pager-info">
+                Página <strong>{{ page_obj.number }}</strong> de <strong>{{ page_obj.paginator.num_pages }}</strong>
+            </span>
+
+            {# Siguiente / Última #}
+            {% if page_obj.has_next %}
+                <a class="pager-btn" href="?page={{page_obj.next_page_number}}&{{query_string}}" aria-label="Página siguiente">
+                    &rsaquo;
+                </a>
+                <a class="pager-btn" href="?page={{page_obj.paginator.num_pages}}&{{query_string}}" aria-label="Última página">
+                    &raquo;
+                </a>
+            {% else %}
+                <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la última página">
+                    &rsaquo;
+                </span>
+                <span class="pager-btn is-disabled" aria-disabled="true" title="Ya estás en la última página">
+                    &raquo;
+                </span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+
+{% endblock content %}
+    
