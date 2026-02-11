@@ -13,7 +13,10 @@
 
     <ul>
         {% for book in books %}
-            <li><strong>{{book.title}}</strong> - {{book.author.name}}</li>
+            <li>
+                <strong>
+                    <a href="{% url 'book-detail' pk=book.id %}">{{book.title}}</a>
+                </strong> - {{book.author.name}}</li>
         {% empty%}
             <li>No hay libros disponibles</li>
         {% endfor %}

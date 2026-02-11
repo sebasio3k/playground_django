@@ -9,5 +9,6 @@ urlpatterns = [
     path('hello-fbv', views.hello, name='hello-fbv'),
     path('hello-cbv', views.Hello.as_view(), name='hello-cbv'),
     path('welcome', views.WelcomeView.as_view(), name='welcome'),
-    path('book-list', views.BookListView.as_view(), name='book-list'),
+    path('books', views.BookListView.as_view(), name='book-list'),
+    path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail'),
 ]

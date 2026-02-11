@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import  messages
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -42,6 +42,12 @@ class BookListView(ListView):
     context_object_name = "books"
     paginate_by = 5
 
+class BookDetailView(DetailView):
+    model = Book
+    template_name = "minilibrary/book_detail.html"
+    context_object_name = "book"
+    # slug_field = "slug"
+    # slug_url_kwarg = "slug"    
 
 
 def index_1(request):
