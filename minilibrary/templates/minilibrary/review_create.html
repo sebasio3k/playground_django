@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Review Form
+{% endblock title %}
+
+
+{% block content %}
+    <h1>Agrega la Reseña de: {{book.title}}</h1>
+
+
+
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-dark" type="submit">Enviar</button>
+    </form>
+
+    <br>
+
+    {% if messages %}
+        {% for message in messages  %}
+            <div class="alert alert-{{message.tags}}">
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <br>
+    <hr>
+    <h3>Reseñas</h3>
+    <br>
+    {% for review in book_reviews  %}
+        <div>
+            <p>{{review}} </p>
+        </div>
+    {% endfor %}
+
+    <div>
+        <a href="{% url 'book-list' %}">Volver a la lista</a>
+    </div>
+        
+    
+{% endblock content %}
+    

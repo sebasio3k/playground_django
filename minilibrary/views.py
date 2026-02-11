@@ -9,7 +9,9 @@ from django.contrib.auth import get_user_model
 from django.contrib import  messages
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -49,6 +51,27 @@ class BookDetailView(DetailView):
     # slug_field = "slug"
     # slug_url_kwarg = "slug"    
 
+class ReviewCreateView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "minilibrary/review_create.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = Book.objects.get(pk=self.kwargs['pk'])
+        context['book_reviews'] = Review.objects.filter(book=self.kwargs['pk'])
+        return context
+    
+    def form_valid(self, form):
+        book_id = self.kwargs['pk']
+        book = Book.objects.get(pk=book_id)
+        form.instance.book = book
+        form.instance.user_id = 1
+        messages.success(self.request, "Gracias por la reseña")
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('create-review', kwargs={'pk': self.kwargs['pk']})
 
 def index_1(request):
     try:

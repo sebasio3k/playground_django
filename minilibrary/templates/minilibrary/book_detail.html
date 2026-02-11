@@ -28,7 +28,13 @@
     {% endif %}
 
 
-    <a href="{% url 'book-list' %}">Volver a la lista</a>
+    <div>
+        <a href="{% url 'book-list' %}">Volver a la lista</a>
+    </div>
+
+    <div>
+        <a href="{% url 'create-review' pk=book.id %}">Añadir Reseña</a>
+    </div>
 
 
 {% endblock content %}
