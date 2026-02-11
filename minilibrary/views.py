@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import  messages
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 
 
@@ -72,6 +72,32 @@ class ReviewCreateView(CreateView):
     
     def get_success_url(self):
         return reverse_lazy('create-review', kwargs={'pk': self.kwargs['pk']})
+
+class ReviewUpdateView(UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "minilibrary/review_create.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = Book.objects.get(pk=self.kwargs['book_id'])
+        context['book_reviews'] = Review.objects.filter(
+            book=self.kwargs['book_id'])
+        context['text_update'] = "Actualizar reseña"
+        return context
+    
+    def get_queryset(self):
+        return Review.objects.filter(user_id=1)
+
+    def form_valid(self, form):
+        messages.success(self.request, "Se ha actualizado la reseña correctamente.")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "Hubo un error al actualizar la reseña.")
+    
+    def get_success_url(self):
+        return reverse_lazy('create-review', kwargs={'pk': self.object.book_id})
 
 def index_1(request):
     try:

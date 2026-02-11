@@ -7,7 +7,14 @@
 
 
 {% block content %}
-    <h1>Agrega la Reseña de: {{book.title}}</h1>
+    <h1>
+        {% if text_update %}
+            {{text_update}} de:
+        {% else %}
+            Agrega la Reseña de: 
+        {% endif %}
+        {{book.title}}
+    </h1>
 
 
 
@@ -15,7 +22,12 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="btn btn-dark" type="submit">Enviar</button>
+        <button class="btn btn-dark" type="submit">
+            {% if text_update %} 
+                {{text_update}}
+            {% else %}
+                Enviar
+            {% endif %} </button>
     </form>
 
     <br>
@@ -29,18 +41,22 @@
     {% endif %}
 
     <br>
-    <hr>
-    <h3>Reseñas</h3>
-    <br>
-    {% for review in book_reviews  %}
-        <div>
-            <p>{{review}} </p>
-        </div>
-    {% endfor %}
-
     <div>
         <a href="{% url 'book-list' %}">Volver a la lista</a>
     </div>
+    <hr>
+    {% if not text_update %}
+        <h3>Reseñas</h3>
+        <br>
+        {% for review in book_reviews  %}
+            <div>
+                <p>
+                    <a href="{% url 'update-review' book_id=book.id pk=review.id %}">{{review}}</a></p>
+            </div>
+        {% endfor %}
+        {% else %}
+        <a href="{% url 'create-review' pk=book.id %}">Volver a las reviews</a>
+    {% endif %}
         
     
 {% endblock content %}
