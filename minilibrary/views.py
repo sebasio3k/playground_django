@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import  messages
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 
@@ -98,6 +98,28 @@ class ReviewUpdateView(UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('create-review', kwargs={'pk': self.object.book_id})
+
+class ReviewDeleteView(DeleteView):
+    model = Review
+    template_name = "minilibrary/review_confirm_delete.html"
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = Book.objects.get(pk=self.kwargs['book_id'])
+        return context
+    
+    def get_success_url(self):
+        return reverse_lazy('create-review', kwargs={'pk': self.kwargs['book_id']})
+    
+    def get_queryset(self):
+        return Review.objects.filter(user_id=1)
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Se ha eliminado la reseña correctamente.")
+        return super().delete(request, *args, **kwargs)
+    
+        
 
 def index_1(request):
     try:

@@ -29,6 +29,12 @@
                 Enviar
             {% endif %} </button>
     </form>
+    
+    <br>
+    {% if text_update %}
+        <a class="btn btn-danger" href="{% url 'delete-review' book_id=book.id pk=review.id %}">Eliminar Reseña</a>
+    {% endif %}
+
 
     <br>
 
