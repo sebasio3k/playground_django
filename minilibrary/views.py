@@ -1,4 +1,5 @@
 import logging
+import time
 from django.shortcuts import render, redirect, get_object_or_404
 from minilibrary.models import Author, Book
 from django.db.models import Q, F
@@ -245,3 +246,8 @@ def add_review_form(request, book_id):
         'book_reviews': book_reviews
     })
         
+
+def Home(request):
+    time.sleep(2)
+    print(request.user)
+    return HttpResponse("Hello World from Home")
