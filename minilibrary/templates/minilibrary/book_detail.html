@@ -1,0 +1,41 @@
+{% extends 'base_blank.html' %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock css %}
+    
+
+{% block title %}
+    Book Detail
+{% endblock title %}
+    
+
+
+{% block content %}
+    <h1>Book Detail</h1>
+    <h2>{{book.title}}</h2>
+    <p><strong> Autor:</strong> {{book.author.name}}</p>
+    <p><strong>Paginas:</strong> {{book.pages}}</p>
+    <p><strong>Fecha de publicación:</strong> {{book.publication_date}}</p>
+    <p><strong>ISBN:</strong> {{book.isbn}}</p>
+
+    {% if book.detail %}
+        <hr>
+        <p><strong>Resumen:</strong> {{book.detail.summary}}</p>
+        <p><strong>Idioma:</strong> {{book.detail.language}}</p>
+    {% endif %}
+
+
+    <div>
+        <a href="{% url 'book-list' %}">Volver a la lista</a>
+    </div>
+
+    <div>
+        <a href="{% url 'create-review' pk=book.id %}">Añadir Reseña</a>
+    </div>
+
+
+{% endblock content %}
+    

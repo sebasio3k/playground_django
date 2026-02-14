@@ -1,4 +1,5 @@
 import logging
+import time
 from django.shortcuts import render, redirect, get_object_or_404
 from minilibrary.models import Author, Book
 from django.db.models import Q, F
@@ -7,11 +8,119 @@ from .forms import ReviewSimpleForm, ReviewForm
 from .models import Review
 from django.contrib.auth import get_user_model
 from django.contrib import  messages
+from django.http import HttpResponse
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
 # Create your views here.
+
+# FBV
+def hello(request):
+    return HttpResponse("Hello World from FBV")
+
+# CBV
+class Hello(View):
+    def get(self, request):
+        return HttpResponse("Hello World from CBV")
+    
+
+class WelcomeView(TemplateView):
+    template_name = "minilibrary/welcome.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Minilibrary"
+        context['total_books'] = Book.objects.count()
+        return context
+    
+
+class BookListView(ListView):
+    model = Book
+    template_name = "minilibrary/book_list.html"
+    context_object_name = "books"
+    paginate_by = 5
+
+class BookDetailView(DetailView):
+    model = Book
+    template_name = "minilibrary/book_detail.html"
+    context_object_name = "book"
+    # slug_field = "slug"
+    # slug_url_kwarg = "slug"    
+
+class ReviewCreateView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "minilibrary/review_create.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = Book.objects.get(pk=self.kwargs['pk'])
+        context['book_reviews'] = Review.objects.filter(book=self.kwargs['pk'])
+        return context
+    
+    def form_valid(self, form):
+        book_id = self.kwargs['pk']
+        book = Book.objects.get(pk=book_id)
+        form.instance.book = book
+        form.instance.user_id = 1
+        messages.success(self.request, "Gracias por la reseña")
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('create-review', kwargs={'pk': self.kwargs['pk']})
+
+class ReviewUpdateView(UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "minilibrary/review_create.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = Book.objects.get(pk=self.kwargs['book_id'])
+        context['book_reviews'] = Review.objects.filter(
+            book=self.kwargs['book_id'])
+        context['text_update'] = "Actualizar reseña"
+        return context
+    
+    def get_queryset(self):
+        return Review.objects.filter(user_id=1)
+
+    def form_valid(self, form):
+        messages.success(self.request, "Se ha actualizado la reseña correctamente.")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "Hubo un error al actualizar la reseña.")
+    
+    def get_success_url(self):
+        return reverse_lazy('create-review', kwargs={'pk': self.object.book_id})
+
+class ReviewDeleteView(DeleteView):
+    model = Review
+    template_name = "minilibrary/review_confirm_delete.html"
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = Book.objects.get(pk=self.kwargs['book_id'])
+        return context
+    
+    def get_success_url(self):
+        return reverse_lazy('create-review', kwargs={'pk': self.kwargs['book_id']})
+    
+    def get_queryset(self):
+        return Review.objects.filter(user_id=1)
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Se ha eliminado la reseña correctamente.")
+        return super().delete(request, *args, **kwargs)
+    
+        
 
 def index_1(request):
     try:
@@ -137,3 +246,8 @@ def add_review_form(request, book_id):
         'book_reviews': book_reviews
     })
         
+
+def Home(request):
+    time.sleep(2)
+    print(request.user)
+    return HttpResponse("Hello World from Home")
