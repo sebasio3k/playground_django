@@ -53,6 +53,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'minilibrary.middleware.TimingMiddleware',
+    'minilibrary.middleware.BlockIPMiddleware',
+    'minilibrary.middleware.OnlyOfficeHoursMiddleware',
+    'minilibrary.middleware.RequireLogginAdminMiddleware',
 ]
 
 ROOT_URLCONF = 'playground.urls'
