@@ -9,7 +9,12 @@
 
 {% block content %}
     <h1>Book List</h1>
+    <hr>
+    <a href="{% url 'welcome'%}" class="btn btn-dark"> Regresar a Index</a>
+    <hr>
+    <br>
     <h2>Libros disponibles</h2>
+
 
     <ul>
         {% for book in books %}

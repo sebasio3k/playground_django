@@ -50,7 +50,12 @@ class BookDetailView(DetailView):
     template_name = "minilibrary/book_detail.html"
     context_object_name = "book"
     # slug_field = "slug"
-    # slug_url_kwarg = "slug"    
+    # slug_url_kwarg = "slug"
+    
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        request.session['last_viewed_book'] = self.object.id
+        return response
 
 class ReviewCreateView(CreateView):
     model = Review
@@ -153,6 +158,8 @@ def index(request):
         query = request.GET.get('query_search')
         date_start = request.GET.get('start')
         date_end = request.GET.get('end')
+        book_id_recommend = request.session.get('last_viewed_book')
+
 
         # filters
         if query:
@@ -178,13 +185,22 @@ def index(request):
             
         query_string = query_params.urlencode()
         
+        if book_id_recommend:
+            try:
+                last_book = Book.objects.get(id=book_id_recommend)
+            except Book.DoesNotExist:
+                last_book = None
+        else:
+            last_book = None
+        
         
         return render(request, "minilibrary/index.html", {
             'text': "Minilibrary Page",
             # 'books': books,
             'page_obj': page_obj,
             'query': query,
-            "query_string": query_string
+            "query_string": query_string,
+            'last_book': last_book,
         })
     except Exception as e:
         logger.error(f'Error: {e}')

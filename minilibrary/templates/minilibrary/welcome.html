@@ -5,5 +5,10 @@
     <h1>Bienvenidos a {{title}}</h1>
     <p>Explora nuevos libros y escribe tus reseñas</p>
     <p><strong>Total de libros: {{total_books}}</strong></p>
+    <hr>
+    <a href="{% url 'minilibrary'%}" class="btn btn-dark"> Buscar libro y añadir reseña</a>
+    <a href="{% url 'book-list'%}" class="btn btn-success"> Ir a todos los libros</a>
+    <hr>
+    
 {% endblock content %}
     
