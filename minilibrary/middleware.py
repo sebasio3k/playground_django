@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 # BLOCKED_IPS = ['127.0.0.1']
 BLOCKED_IPS = ['38.0.101.76']
 
-EXCEPT_PATHS = ['/admin/', '/admin/login/', 'login/']
+EXCEPT_PATHS = ['/admin/', '/admin/login/', '/login']
 
 class TimingMiddleware:
     def __init__(self, get_response):

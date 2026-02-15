@@ -1,0 +1,16 @@
+{% extends 'base_blank.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock css %}
+    
+
+{% block content %}
+    <h2>Iniciar Sesión</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">LogIn</button>
+    </form>
+{% endblock content %}

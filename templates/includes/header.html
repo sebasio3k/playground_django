@@ -1,6 +1,46 @@
-<header>
-    <div>
-        <p>Logo</p>
-        <p>Sebastian</p>
+<header class="apple-header">
+    <div class="apple-header__inner">
+
+        <!-- Brand -->
+        <a href="{% url 'welcome' %}" class="apple-header__brand">
+            {% comment %} <img src="{% static 'images/logo.png' %}" alt="Logo" height="18"> {% endcomment %}
+            <span>Minilibrary</span>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="apple-header__nav">
+            <a href="{% url 'welcome' %}" class="apple-header__link">Inicio</a>
+            <a href="{% url 'minilibrary' %}" class="apple-header__link">Añadir Reseña</a>
+            <a href="{% url 'book-list' %}" class="apple-header__link">Lista de Libros</a>
+        </nav>
+
+        <!-- Right side -->
+        <div class="apple-header__actions">
+
+            {% if request.user.is_authenticated %}
+            <span class="apple-header__user">
+                {{ request.user.username }}
+            </span>
+
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="apple-header__pill">Logout</button>
+                
+            </form>
+            
+            {% comment %} <a href="{% url 'logout' %}" class="apple-header__pill">
+                Logout
+            </a> {% endcomment %}
+
+            {% else %}
+
+            <a href="{% url 'login' %}" class="apple-header__pill">
+                Login
+            </a>
+
+            {% endif %}
+
+        </div>
+
     </div>
 </header>
