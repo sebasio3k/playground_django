@@ -15,4 +15,5 @@ urlpatterns = [
     path('book/<int:book_id>/review-update/<int:pk>', views.ReviewUpdateView.as_view(), name='update-review'),
     path('book/<int:book_id>/review-delete/<int:pk>', views.ReviewDeleteView.as_view(), name='delete-review'),
     path('home-middle', views.Home, name='home'),
+    path('counter/', views.visit_counter, name='counter'),
 ]

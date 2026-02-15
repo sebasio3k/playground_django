@@ -251,3 +251,11 @@ def Home(request):
     time.sleep(2)
     print(request.user)
     return HttpResponse("Hello World from Home")
+    
+
+def visit_counter(request):
+    visits_count = request.session.get('visit_count', 0)
+    visits_count += 1
+    request.session['visit_count'] = visits_count
+    return HttpResponse(f"You have visit this page {visits_count} times.")
+
