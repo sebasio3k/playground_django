@@ -257,5 +257,7 @@ def visit_counter(request):
     visits_count = request.session.get('visit_count', 0)
     visits_count += 1
     request.session['visit_count'] = visits_count
+    # request.session.set_expiry(15)
+    # 300 = 5 min, 0 = close navigation, None = no expire
     return HttpResponse(f"You have visit this page {visits_count} times.")
 

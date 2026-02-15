@@ -194,3 +194,9 @@ LOGGING = {
         },
     },
 }
+
+SESSION_COOKIE_AGE = 3600 # 1 HOUR
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True # Update session duration
+
+
