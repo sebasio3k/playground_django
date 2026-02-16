@@ -8,10 +8,13 @@ from .forms import ReviewSimpleForm, ReviewForm
 from .models import Review
 from django.contrib.auth import get_user_model
 from django.contrib import  messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
 
 
 logger = logging.getLogger(__name__)
@@ -39,18 +42,27 @@ class WelcomeView(TemplateView):
         return context
     
 
-class BookListView(ListView):
+class BookListView(LoginRequiredMixin, ListView):
     model = Book
     template_name = "minilibrary/book_list.html"
     context_object_name = "books"
     paginate_by = 5
+    
 
-class BookDetailView(DetailView):
+class BookDetailView(LoginRequiredMixin, DetailView):
     model = Book
     template_name = "minilibrary/book_detail.html"
     context_object_name = "book"
     # slug_field = "slug"
-    # slug_url_kwarg = "slug"    
+    # slug_url_kwarg = "slug"
+    
+    def get(self, request, *args, **kwargs):
+        if request.user.has_perm('minilibrary.view_book'):
+            response = super().get(request, *args, **kwargs)
+            request.session['last_viewed_book'] = self.object.id
+            return response
+        else:
+            return HttpResponseForbidden("No tienes permiso para ver este libro.")
 
 class ReviewCreateView(CreateView):
     model = Review
@@ -60,14 +72,14 @@ class ReviewCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book'] = Book.objects.get(pk=self.kwargs['pk'])
-        context['book_reviews'] = Review.objects.filter(book=self.kwargs['pk'])
+        context['book_reviews'] = Review.objects.filter(book=self.kwargs['pk'], user_id=self.request.user.id)
         return context
     
     def form_valid(self, form):
         book_id = self.kwargs['pk']
         book = Book.objects.get(pk=book_id)
         form.instance.book = book
-        form.instance.user_id = 1
+        form.instance.user_id = self.request.user.id
         messages.success(self.request, "Gracias por la reseña")
         return super().form_valid(form)
     
@@ -88,7 +100,7 @@ class ReviewUpdateView(UpdateView):
         return context
     
     def get_queryset(self):
-        return Review.objects.filter(user_id=1)
+        return Review.objects.filter(user_id=self.request.user.id)
 
     def form_valid(self, form):
         messages.success(self.request, "Se ha actualizado la reseña correctamente.")
@@ -100,7 +112,8 @@ class ReviewUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('create-review', kwargs={'pk': self.object.book_id})
 
-class ReviewDeleteView(DeleteView):
+class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = 'minilibrary.delete_review'
     model = Review
     template_name = "minilibrary/review_confirm_delete.html"
     
@@ -114,7 +127,7 @@ class ReviewDeleteView(DeleteView):
         return reverse_lazy('create-review', kwargs={'pk': self.kwargs['book_id']})
     
     def get_queryset(self):
-        return Review.objects.filter(user_id=1)
+        return Review.objects.filter(user_id=self.request.user.id)
     
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Se ha eliminado la reseña correctamente.")
@@ -147,12 +160,15 @@ def index_1(request):
         logger.error(f'Error: {e}')
         return render(request, "404.html", status=404)
     
+@login_required # for fbv
 def index(request):
     try:
         books = Book.objects.all()
         query = request.GET.get('query_search')
         date_start = request.GET.get('start')
         date_end = request.GET.get('end')
+        book_id_recommend = request.session.get('last_viewed_book')
+
 
         # filters
         if query:
@@ -178,13 +194,22 @@ def index(request):
             
         query_string = query_params.urlencode()
         
+        if book_id_recommend:
+            try:
+                last_book = Book.objects.get(id=book_id_recommend)
+            except Book.DoesNotExist:
+                last_book = None
+        else:
+            last_book = None
+        
         
         return render(request, "minilibrary/index.html", {
             'text': "Minilibrary Page",
             # 'books': books,
             'page_obj': page_obj,
             'query': query,
-            "query_string": query_string
+            "query_string": query_string,
+            'last_book': last_book,
         })
     except Exception as e:
         logger.error(f'Error: {e}')
@@ -222,6 +247,7 @@ def add_review(request, book_id):
     
 
 # Con ModelForm
+@permission_required('minilibrary.add_review')
 def add_review_form(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     form = ReviewForm(request.POST or None)
@@ -251,3 +277,13 @@ def Home(request):
     time.sleep(2)
     print(request.user)
     return HttpResponse("Hello World from Home")
+    
+
+def visit_counter(request):
+    visits_count = request.session.get('visit_count', 0)
+    visits_count += 1
+    request.session['visit_count'] = visits_count
+    # request.session.set_expiry(15)
+    # 300 = 5 min, 0 = close navigation, None = no expire
+    return HttpResponse(f"You have visit this page {visits_count} times.")
+

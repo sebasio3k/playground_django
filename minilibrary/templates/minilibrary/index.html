@@ -11,9 +11,15 @@
 
 
 {% block content %}
+{% include "includes/header.html" %}
     <div>
         <h1>{{text}}</h1>
     </div>
+    <br>
+    <hr>
+    <a href="{% url 'book-list'%}"> Ir a todos los libros</a>
+    <br>
+    <a href="{% url 'welcome'%}" class="btn btn-dark"> Regresar a Index</a>
     <hr>
     <br>
     <div>
@@ -94,6 +100,15 @@
             </span>
         {% endif %}
     </div>
+
+
+    <br>
+    <hr>
+    {% if last_book %}
+        <p>Ultimo libro visitado: <a href="{% url 'book-detail' pk=last_book.id %}">{{last_book.title}}</a></p>
+    {% else %}
+        <p>No has visitado ningun libro</p>
+    {% endif %}
 
 
 {% endblock content %}

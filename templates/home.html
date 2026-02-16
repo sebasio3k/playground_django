@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Home</title></head>
+  <body>
+    <h1>Índice</h1>
+    <ul>
+      {% for item in links %}
+        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
