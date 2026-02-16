@@ -8,11 +8,11 @@ from .forms import ReviewSimpleForm, ReviewForm
 from .models import Review
 from django.contrib.auth import get_user_model
 from django.contrib import  messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -57,9 +57,12 @@ class BookDetailView(LoginRequiredMixin, DetailView):
     # slug_url_kwarg = "slug"
     
     def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        request.session['last_viewed_book'] = self.object.id
-        return response
+        if request.user.has_perm('minilibrary.view_book'):
+            response = super().get(request, *args, **kwargs)
+            request.session['last_viewed_book'] = self.object.id
+            return response
+        else:
+            return HttpResponseForbidden("No tienes permiso para ver este libro.")
 
 class ReviewCreateView(CreateView):
     model = Review
@@ -243,6 +246,7 @@ def add_review(request, book_id):
     
 
 # Con ModelForm
+@permission_required('minilibrary.add_review')
 def add_review_form(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     form = ReviewForm(request.POST or None)
