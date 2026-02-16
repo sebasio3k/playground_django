@@ -13,7 +13,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 
@@ -72,14 +72,14 @@ class ReviewCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book'] = Book.objects.get(pk=self.kwargs['pk'])
-        context['book_reviews'] = Review.objects.filter(book=self.kwargs['pk'])
+        context['book_reviews'] = Review.objects.filter(book=self.kwargs['pk'], user_id=self.request.user.id)
         return context
     
     def form_valid(self, form):
         book_id = self.kwargs['pk']
         book = Book.objects.get(pk=book_id)
         form.instance.book = book
-        form.instance.user_id = 1
+        form.instance.user_id = self.request.user.id
         messages.success(self.request, "Gracias por la reseña")
         return super().form_valid(form)
     
@@ -100,7 +100,7 @@ class ReviewUpdateView(UpdateView):
         return context
     
     def get_queryset(self):
-        return Review.objects.filter(user_id=1)
+        return Review.objects.filter(user_id=self.request.user.id)
 
     def form_valid(self, form):
         messages.success(self.request, "Se ha actualizado la reseña correctamente.")
@@ -112,7 +112,8 @@ class ReviewUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('create-review', kwargs={'pk': self.object.book_id})
 
-class ReviewDeleteView(DeleteView):
+class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = 'minilibrary.delete_review'
     model = Review
     template_name = "minilibrary/review_confirm_delete.html"
     
@@ -126,7 +127,7 @@ class ReviewDeleteView(DeleteView):
         return reverse_lazy('create-review', kwargs={'pk': self.kwargs['book_id']})
     
     def get_queryset(self):
-        return Review.objects.filter(user_id=1)
+        return Review.objects.filter(user_id=self.request.user.id)
     
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Se ha eliminado la reseña correctamente.")
