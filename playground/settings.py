@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'minilibrary.middleware.TimingMiddleware',
     'minilibrary.middleware.BlockIPMiddleware',
     'minilibrary.middleware.OnlyOfficeHoursMiddleware',
-    'minilibrary.middleware.RequireLogginAdminMiddleware',
+    # 'minilibrary.middleware.RequireLogginAdminMiddleware',
 ]
 
 ROOT_URLCONF = 'playground.urls'
@@ -201,4 +201,6 @@ SESSION_SAVE_EVERY_REQUEST = True # Update session duration
 
 LOGIN_REDIRECT_URL = 'welcome'
 LOGOUT_REDIRECT_URL = 'login'
+
+LOGIN_URL = 'login'
 

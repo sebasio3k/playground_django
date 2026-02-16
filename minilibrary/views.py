@@ -12,6 +12,9 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 logger = logging.getLogger(__name__)
@@ -39,13 +42,14 @@ class WelcomeView(TemplateView):
         return context
     
 
-class BookListView(ListView):
+class BookListView(LoginRequiredMixin, ListView):
     model = Book
     template_name = "minilibrary/book_list.html"
     context_object_name = "books"
     paginate_by = 5
+    
 
-class BookDetailView(DetailView):
+class BookDetailView(LoginRequiredMixin, DetailView):
     model = Book
     template_name = "minilibrary/book_detail.html"
     context_object_name = "book"
@@ -152,6 +156,7 @@ def index_1(request):
         logger.error(f'Error: {e}')
         return render(request, "404.html", status=404)
     
+@login_required # for fbv
 def index(request):
     try:
         books = Book.objects.all()
