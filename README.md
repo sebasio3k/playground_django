@@ -1,5 +1,75 @@
-# playground_django
-Playground with Django
+# Playground Django
+
+Backend engineering playground built with Django to explore core framework features, architectural patterns, and best practices in modern web application development.
+
+This repository serves as a sandbox environment for experimenting with authentication, templates, models, middleware, UI integration, and reusable application components.
+
+---
+
+## Purpose
+
+The goal of this project is to deepen understanding of Django internals while building reusable patterns that can be applied in production systems.
+
+This includes:
+
+- Application architecture design
+- Authentication and session management
+- Template composition and reusable components
+- Class-based views and routing
+- Middleware implementation
+- ORM usage and data modeling
+- Backend-driven UI systems
+
+---
+
+## Tech Stack
+
+- Python 3
+- Django 5
+- SQLite (development)
+- Django Templates
+- Bootstrap 5
+- Custom CSS (Apple-inspired minimal UI)
+
+---
+
+## Features Implemented
+
+### Core Framework
+
+- URL routing and namespacing
+- Function-based and class-based views
+- Model definition and ORM usage
+- Form handling and validation
+- Django Admin configuration
+
+### Authentication
+
+- Login and logout system
+- Session management
+- Protected views
+- User-based content filtering
+
+### Templates
+
+- Template inheritance (`base.html`)
+- Includes and reusable components (`header.html`)
+- Clean layout architecture
+
+### UI System
+
+- Apple-style minimal UI
+- Sticky header with blur effect
+- Responsive layout
+- Modular styling system
+
+### Middleware
+
+- Custom middleware experimentation
+- Request and response interception
+
+---
+
 
 Exploring django tools:
 • Urls
