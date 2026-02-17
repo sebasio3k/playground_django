@@ -209,3 +209,6 @@ __marimo__/
 .DS_Store
 logs/*
 !logs/.gitkeep
+
+media/*
+media/books/covers/.gitkeep

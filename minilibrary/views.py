@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from minilibrary.models import Author, Book
 from django.db.models import Q, F
 from django.core.paginator import Paginator
-from .forms import ReviewSimpleForm, ReviewForm
+from .forms import BookForm, ReviewSimpleForm, ReviewForm
 from .models import Review
 from django.contrib.auth import get_user_model
 from django.contrib import  messages
@@ -287,3 +287,13 @@ def visit_counter(request):
     # 300 = 5 min, 0 = close navigation, None = no expire
     return HttpResponse(f"You have visit this page {visits_count} times.")
 
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('book-list')
+    else:
+        form = BookForm()
+        
+    return render(request, 'minilibrary/add_book.html', {'form': form})

@@ -17,10 +17,28 @@
 {% include 'includes/header.html' %}
     <h1>Book Detail</h1>
     <h2>{{book.title}}</h2>
-    <p><strong> Autor:</strong> {{book.author.name}}</p>
+    <p><strong>Autor:</strong> {{book.author.name}}</p>
+
     <p><strong>Paginas:</strong> {{book.pages}}</p>
     <p><strong>Fecha de publicación:</strong> {{book.publication_date}}</p>
     <p><strong>ISBN:</strong> {{book.isbn}}</p>
+    {% if book.cover %}
+        <p><strong>Cover:</strong></p>
+        <img
+            src="{% if book.cover %}{{ book.cover.url }}{% else %}{% static 'images/no_cover.jpg' %}{% endif %}"
+            alt="Portada de {{ book.title }}"
+            width="150"
+            onerror="this.onerror=null;this.src='{% static 'images/no_cover.jpg' %}';"
+        />
+    {% else %}
+    <p>Sin portada</p> 
+        <img
+            src="{% if book.cover %}{{ book.cover.url }}{% else %}{% static 'images/no_cover.jpg' %}{% endif %}"
+            alt="Portada de {{ book.title }}"
+            width="150"
+            onerror="this.onerror=null;this.src='{% static 'images/no_cover.jpg' %}';"
+        />
+    {% endif %}
 
     {% if book.detail %}
         <hr>

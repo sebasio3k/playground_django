@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Book Form
+{% endblock title %}
+
+
+{% block content %}
+    <h1>Añadir nuevo Libro</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <button class="btn btn-primary" type="submit">Crear Libro</button>
+    </form>
+
+    <br>
+
+    {% if form.cover.errors%}
+        <div class="alert alert-danger">
+            {{form.cover.errors}}
+        </div>
+    {% endif %}
+
+    <br>
+    <hr>
+        
+    
+{% endblock content %}
+    
