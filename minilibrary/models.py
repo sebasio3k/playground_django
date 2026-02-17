@@ -23,6 +23,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=13, null=True, blank=True)
     genres = models.ManyToManyField(Genre, related_name='books')
     recommended_by = models.ManyToManyField(get_user_model(), through='Recommendation', related_name='recommendations')
+    cover = models.ImageField(upload_to='books/covers/', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Libro'
@@ -48,7 +49,7 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.user} -> {self.book} - ({self.rating}⭐️/5⭐️) - {self.text}"
+        return f"{self.user} -> {self.book} - ({self.rating}/5⭐️) - {self.text}"
     
 class Loan(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='loans')

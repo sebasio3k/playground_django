@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block title %}
@@ -11,17 +12,26 @@
     <h1>Book List</h1>
     <hr>
     <a href="{% url 'welcome'%}" class="btn btn-dark"> Regresar a Index</a>
+    <a href="{% url 'add-book'%}" class="btn btn-success"> Añadir Libro</a>
     <hr>
     <br>
     <h2>Libros disponibles</h2>
-
+    {{no_cover}}
 
     <ul>
         {% for book in books %}
             <li>
                 <strong>
                     <a href="{% url 'book-detail' pk=book.id %}">{{book.title}}</a>
-                </strong> - {{book.author.name}}</li>
+                </strong> - {{book.author.name}}
+                <br>
+                <img
+                    src="{% if book.cover %}{{ book.cover.url }}{% else %}{% static 'images/no_cover.jpg' %}{% endif %}"
+                    alt="Portada de {{ book.title }}"
+                    width="150"
+                    onerror="this.onerror=null;this.src='{% static 'images/no_cover.jpg' %}';"
+                />
+            </li>
         {% empty%}
             <li>No hay libros disponibles</li>
         {% endfor %}
